@@ -3,7 +3,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const errorHandler = (err, req, res, next) => {
   let error = { ...err, message: err.message };
   // Log to console for dev.
-  console.log(err);
+  console.log(err.stack.red);
 
   // Mongoose malformed ObjectId
   if (err.name === 'CastError') {
