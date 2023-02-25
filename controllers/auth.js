@@ -68,3 +68,37 @@ const sendTokenResponse = (user, statusCode, res) => {
     token
   });
 };
+
+// @desc  Get current logged in user
+// @route POST /api/v1/auth/me
+// @access  Private
+exports.getMe = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({
+    success: true,
+    data: user
+  });
+});
+
+// @desc  Recover password
+// @route POST /api/v1/auth/recover-password
+// @access  Public
+exports.recoverPassword = asyncHandler(async (req, res, next) => {
+  console.log(req.body.email);
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return next(new ErrorResponse('There is no user with that email', 404));
+  }
+
+  const resetToken = user.getResetPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+  console.log(resetToken);
+
+  res.status(200).json({
+    success: true,
+    data: user
+  });
+});
