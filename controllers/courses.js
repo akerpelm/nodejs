@@ -5,7 +5,7 @@ const Bootcamp = require('../models/Bootcamp');
 
 // @desc  Get all courses
 // @route GET /api/v1/courses
-// @route GET /api/v1/botcamps/:bootcampId/courses
+// @route GET /api/v1/bootcamps/:bootcampId/courses
 // @access  Public
 exports.getCourses = asyncHandler(async (req, res, next) => {
   if (req.params.bootcampId) {
