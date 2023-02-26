@@ -6,6 +6,11 @@ const colors = require('colors');
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xssClean = require('xss-clean');
+const expressRateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
 const errorHandler = require('./middleware/error');
 
 //Load env vars
@@ -20,6 +25,7 @@ const courses = require('./routes/courses');
 const auth = require('./routes/auth');
 const users = require('./routes/users');
 const reviews = require('./routes/reviews');
+const { max } = require('class-validator');
 
 // Connect to database;
 connectDB();
@@ -41,7 +47,26 @@ if (process.env.NODE_ENV === 'development') {
 app.use(fileUpload());
 
 // Sanitize data
-app.use(mongoSanitize);
+app.use(mongoSanitize());
+
+// Set security headers
+app.use(helmet());
+
+// Prevent XSS attacks
+app.use(xssClean());
+
+// Rate limiter
+const limiter = expressRateLimit({
+  windowMs: 10 * 60 * 1000, // 10 mins
+  max: 100
+});
+app.use(limiter);
+
+// Prevent HTTP param polution
+app.use(hpp());
+
+// Enable CORS
+app.use(cors());
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
