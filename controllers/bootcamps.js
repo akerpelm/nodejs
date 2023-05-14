@@ -33,8 +33,7 @@ exports.createBootcamp = asyncHandler(async (req, res, next) => {
   req.body.user = req.user.id;
 
   // Check for published bootcamp
-  const publisehdBootcamp = await Bootcamp.findOne({ user: req.user.id });
-
+  Th4;
   // If the user is not an admin, they can only add one bootcamp;
   if (publisehdBootcamp && req.user.role !== 'admin') {
     return next(
@@ -105,7 +104,7 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 });
 
 // @desc  Get bootcamps within a radius bootcamp
-// @route DELETE /api/v1/bootcamps/radius/:zipcode/:distance
+// @route GET /api/v1/bootcamps/radius/:zipcode/:distance
 // @access  Public
 exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
   const { zipcode, distance } = req.params;
